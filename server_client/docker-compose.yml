@@ -1,0 +1,29 @@
+version: "3.7"
+
+services:
+  server:
+    container_name: ipc_server_dns_name
+    build: ./server
+    volumes:
+      - ./servervol:/serverdata
+    networks:
+      - servernet
+  
+  client:
+    container_name: ipc_client_dns_name
+    build: ./client
+    volumes:
+      - ./clientvol:/clientdata
+    networks:
+      - servernet
+    depends_on:
+      - server
+    links:
+      - server
+    environment:
+      HOST: server
+
+networks:
+  servernet:
+    driver: bridge
+
